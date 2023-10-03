@@ -51,7 +51,41 @@ except NoSuchElementException as e:
 
 ## Obtener los datos de Instancias Administrativas
 
+#Busca el div que contiene la informacion
+wait = WebDriverWait(driver, 10)    #Espera hasta que el elemento 'dvInstancias' aparezca en la página
+div_instancias = wait.until(EC.presence_of_element_located((By.ID, 'dvInstancias')))
 
-# Espera unos segundos para que la página cargue
+#Busca la tabla dentro del div
 time.sleep(5)
+tabla_instancias = div_instancias.find_element(By.ID, 'tblInstancias')
+
+# Obtiene todas las filas de la tabla
+filas = tabla_instancias.find_elements(By.TAG_NAME, 'tr')
+
+# Inicializa listas para almacenar los datos
+fechas = []
+descripciones = []
+observaciones = []
+
+# Itera a través de las filas, omitiendo la fila que contiene encabezados
+for fila in filas[1:]:
+    #Obtengo los datos de la tabla
+    celdas = fila.find_elements(By.TAG_NAME, 'td')
+    
+    # Extrae los datos de las celdas
+    fecha = celdas[0].text
+    descripcion = celdas[1].text
+    observacion = celdas[2].text
+    
+    # Agrega los datos a las listas
+    fechas.append(fecha)
+    descripciones.append(descripcion)
+    observaciones.append(observacion)
+
+    #Datos
+    print(f"Fecha: {fecha}")
+    print(f"Descripción: {descripcion}")
+    print(f"Observación: {observacion}")
+    print("-" * 50)
+
 driver.quit()
