@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
-
+import json
 
 PATH = 'D:\Descargas\chromedriver-win64\chromedriver.exe'
 
@@ -20,7 +20,7 @@ driver.get(url)
 
 driver.implicitly_wait(10)  # Espera hasta 10 segundos como máximo
 
-numero_registro = "1234567"  # Reemplaza con el número de registro que desees
+numero_registro = "1236223"  # Reemplaza con el número de registro que desees
 
 ## Primera parte Buscar un registro
 try:
@@ -63,29 +63,41 @@ tabla_instancias = div_instancias.find_element(By.ID, 'tblInstancias')
 filas = tabla_instancias.find_elements(By.TAG_NAME, 'tr')
 
 # Inicializa listas para almacenar los datos
-fechas = []
-descripciones = []
-observaciones = []
+resultados = []
+
 
 # Itera a través de las filas, omitiendo la fila que contiene encabezados
 for fila in filas[1:]:
+    observada_de_fondo = False
+    fecha_observada_fondo = None
+    apelaciones = False
+    ipt = False
     #Obtengo los datos de la tabla
     celdas = fila.find_elements(By.TAG_NAME, 'td')
-    
-    # Extrae los datos de las celdas
-    fecha = celdas[0].text
     descripcion = celdas[1].text
-    observacion = celdas[2].text
+    print(descripcion)
     
-    # Agrega los datos a las listas
-    fechas.append(fecha)
-    descripciones.append(descripcion)
-    observaciones.append(observacion)
+    if "Resolución de observaciones de fondo de marca" in descripcion:
+        observada_de_fondo = True
+        fecha_observada_fondo = celdas[0].text
 
-    #Datos
-    print(f"Fecha: {fecha}")
-    print(f"Descripción: {descripcion}")
-    print(f"Observación: {observacion}")
-    print("-" * 50)
+    if "Recurso de apelacion" in descripcion:
+        apelaciones = True
+
+    if "IPT" in descripcion or "IPTV" in descripcion:
+        ipt = True
+
+    # Agrega los resultados a la lista
+    resultados.append({
+        'Numero_Registro': numero_registro,
+        'Observada_de_Fondo': observada_de_fondo,
+        'Fecha_Observada_Fondo': fecha_observada_fondo,
+        'Apelaciones': apelaciones,
+        'IPT': ipt
+    })
+
+# Guarda los resultados en un archivo JSON
+with open('data/resultados.json', 'w') as json_file:
+    json.dump(resultados, json_file, indent=4)
 
 driver.quit()
