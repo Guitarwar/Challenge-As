@@ -19,7 +19,7 @@ driver.implicitly_wait(10)  # Espera hasta 10 segundos como máximo
 
 numero_registro = "1234567"  # Reemplaza con el número de registro que desees
 
-#Primera parte Buscar
+#Primera parte Buscar un registro
 try:
     registro_input = driver.find_element(By.ID, "txtRegistro")
     registro_input.send_keys(numero_registro)
@@ -27,13 +27,17 @@ except NoSuchElementException as e:
     print(f"Elemento 'txtRegistro' no encontrado: {e}")
 
 try:
-    buscar_button = driver.find_element(By.ID, "btnBuscarMarca")
-    buscar_button.click()
+    buscar_btn = driver.find_element(By.ID, "btnBuscarMarca")
+    buscar_btn.click()
 except NoSuchElementException as e:
     print(f"Elemento 'btnBuscarMarca' no encontrado: {e}")
 
-#Segunda parte
-
+#Segunda parte clickear Tabla
+try:
+    btn_tabla = driver.find_element(By.ID, "tblMarcasResult")
+    btn_tabla.click()
+except NoSuchElementException as e:
+    print(f"Elemento 'tblMarcasResult' no encontrado: {e}")
 
 # Espera unos segundos para que la página cargue
 time.sleep(5)
