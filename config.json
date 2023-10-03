@@ -1,0 +1,8 @@
+{
+    "chrome_driver_path": "D:/Descargas/chromedriver-win64/chromedriver.exe",
+    "output_file_path": "data/resultados.json",
+    "wait_time": 10,
+    "start_maximized": true,
+    "numeros_registro": ["1236216", "1236222", "1236223", "1236224","1236226", "1236227", "1236275", "1236319", "1236450", "1236470", "1236472","1236471", "1236482"]
+    
+}
